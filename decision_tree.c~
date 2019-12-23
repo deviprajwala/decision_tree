@@ -55,19 +55,19 @@ char s9[10]="has_legs";
 char s10[10]="hibernates";
 ret r;
 
-info getinfo();
-node getnode();
-ret getret(int stopping,char *test);
-void input(int n,info head);
-void print(info head);
-int find_best_split(info head);
-float find_gini_index_binary(char *s1,char *s2,char *s3,info head);
-void check_label_pos(info head,int value);
-float calculate();
-float smallest(float c[6],int n);
-node tree_growth(info head);
-ret stopping_condition(info head);
-info split_record(int bin,int v,info head);
+info getinfo();//function to get a info structure
+node getnode();//function to get a node structure
+ret getret(int stopping,char *test);//function to return two values
+void input(int n,info head);//function to read input 
+void print(info head);//function to print the records
+int find_best_split(info head);//function to otain attribute which performs best split
+float find_gini_index_binary(char *s1,char *s2,char *s3,info head);//function to find the gini indexvalue
+void check_label_pos(info head,int value);//function which supports in calculation of gini index value
+float calculate();//function to calculate gini value
+float smallest(float c[6],int n);//function to find smallest gini value
+node tree_growth(info head);//the main function in trainning
+ret stopping_condition(info head);//function to test the stopping condition
+info split_record(int bin,int v,info head);//function which performs splitting
 
 node tree_growth(info head)
 {
@@ -129,20 +129,75 @@ info split_record(int bin,int v,info head)
  info cur,head_new,cur_new;
  head_new=getinfo();
  cur=head->link;
- if(v==1)//perform splitting based on first attribute
+ if(v==1)//perform splitting based on first attribute-body temperature
  {
    while(cur!=NULL)
     {
       p=strcmp(cur->body_temperature,s1);
+      goto label;
+
+      label2:
+      cur=cur->link;
+    } 
+ }
+ else if(v==2)//perform splitting based on second attribute-gives birth
+ {
+   while(cur!=NULL)
+    {
+      p=strcmp(cur->gives_birth,s6);
       goto label1;
 
       label2:
       cur=cur->link;
     } 
  }
+ else if(v==3)//perform splitting based on third attribute-aquatic creature
+ {
+   while(cur!=NULL)
+    {
+      p=strcmp(cur->aquatic_creature,s7);
+      goto label1;
+
+      label3:
+      cur=cur->link;
+    } 
+ }
+ else if(v==4)//perform splitting based on fourth attribute-aerial creature
+ {
+   while(cur!=NULL)
+    {
+      p=strcmp(cur->aerial_creature,s8);
+      goto label1;
+
+      label4:
+      cur=cur->link;
+    } 
+ }
+ else if(v==5)//perform splitting based on fifth attribute-has legs
+ {
+   while(cur!=NULL)
+    {
+      p=strcmp(cur->has_legs,s9);
+      goto label1;
+
+      label5:
+      cur=cur->link;
+    } 
+ }
+ else if(v==6)//perform splitting based on sixth attribute-hibernates
+ {
+   while(cur!=NULL)
+    {
+      p=strcmp(cur->hibernates,s10);
+      goto label1;
+
+      label6:
+      cur=cur->link;
+    } 
+ }
  return head_new;
 
-label1:
+label:
    {
      if(bin==1)
      {
@@ -154,6 +209,7 @@ label1:
              }
              else
              {
+             cur_new=getinfo();
              cur_new=head_new->link;
              while(cur_new->link!=NULL)
                {
@@ -183,7 +239,30 @@ label1:
       }
    }
  }
- goto label2;
+ if(v==1)
+ {
+  goto label1;//if split is done based on first attribute the goto label1
+ }
+ else if(v==2)
+ {
+  goto label2;//if split is done based on second attribute the goto label2
+ }
+ else if(v==3)
+ {
+  goto label3;//if split is done based on third attribute the goto label3
+ }
+ else if(v==4)
+ {
+  goto label4;//if split is done based on fourth attribute the goto label4
+ }
+ else if(v==5)
+ {
+  goto label5;//if split is done based on fifth attribute the goto label5
+ }
+ else if(v==6)
+ {
+  goto label6;//if split is done based on sixth attribute the goto label6
+ }
 }
 
 
