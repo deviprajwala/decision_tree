@@ -57,7 +57,7 @@ ret r;
 
 info getinfo();
 node getnode();
-ret getret(int id,int stopping,char *a);
+ret getret(int stopping,char *test);
 void input(int n,info head);
 void print(info head);
 int find_best_split(info head);
@@ -66,7 +66,7 @@ void check_label_pos(info head,int value);
 float calculate();
 float smallest(float c[6],int n);
 node tree_growth(info head);
-ret stopping condition(head);
+ret stopping_condition(info head);
 info split_record(int bin,int v,info head);
 
 node tree_growth(info head)
@@ -74,32 +74,34 @@ node tree_growth(info head)
    int v;
    ret s;
    info head_left,head_right;
-   s=stopping condition(head);
+   node rooot,right_child,left_child;
+
+   s=stopping_condition(head);//function to check the stopping conition
    if(s->stopping==1)//if the stopping condition is met i.e all data points have same label
    {
      node leaf;
      leaf=getnode();
-     leaf->label=s->label//leaf node is created and label is assigned
-     return leaf
+     strcpy(leaf->label,s->label);//leaf node is created and label is assigned
+     return leaf;
    }
    else
    {
-   node rooot;
+   
    rooot=getnode();
    v=find_best_split(head);// v is the condition id which is returned by best split function
    head_left=split_record(1,v,head);//spilt the the records which satisfies the condition
    head_right=split_record(0,v,head);//spilt the the records which does not satisfy the condition
-   right_child=tree_growth(info head_right);//check foe further growth in child nodes
-   left_child=tree_growth(info head_left);
-   root->rchild=right_child;//assign the child nodes to the root
-   root->lchild=left_child;
+   right_child=tree_growth(head_right);//check foe further growth in child nodes
+   left_child=tree_growth(head_left);
+   rooot->rchild=right_child;//assign the child nodes to the root
+   rooot->lchild=left_child;
    }
 return rooot;
 }
 
-ret stopping condition(info head)
+ret stopping_condition(info head)
 {
- int p;
+ int p,stopping;
  ret r;
  char test[10];
  info cur;
@@ -123,9 +125,69 @@ ret stopping condition(info head)
 
 info split_record(int bin,int v,info head)
 {
- info head_new
+ int p;
+ info cur,head_new,cur_new;
+ head_new=getinfo();
+ cur=head->link;
+ if(v==1)//perform splitting based on first attribute
+ {
+   while(cur!=NULL)
+    {
+      p=strcmp(cur->body_temperature,s1);
+      goto label1;
+
+      label2:
+      cur=cur->link;
+    } 
+ }
  return head_new;
+
+label1:
+   {
+     if(bin==1)
+     {
+        if(p==0)//splitting if body temperature is warm
+          {
+             if(head_new->link==NULL)
+             {
+              head_new->link=cur;
+             }
+             else
+             {
+             cur_new=getinfo();
+             cur_new=head_new->link;
+             while(cur_new->link!=NULL)
+               {
+               cur_new=cur_new->link;
+               }
+             cur_new->link=cur;
+             }
+          }
+      }
+      else if(bin==0)
+      {
+        if(p!=0)//splitting if body temprature is cold
+          {
+            if(head_new->link==NULL)
+            {
+            head_new->link=cur;
+            }
+            else
+            {
+            cur_new=head_new->link;
+            while(cur_new->link!=NULL)
+              {
+              cur_new=cur_new->link;
+              }
+           cur_new->link=cur;
+          }
+      }
+   }
+ }
+ goto label2;
 }
+
+
 info getinfo()
 {
   info x;
@@ -138,16 +200,15 @@ node getnode()
 {
   node x;
   x=(node)malloc(sizeof(struct node));
-  x->link=NULL;
   return x;
 }
 
-ret getret(int id,int stopping,char *a)
+ret getret(int stopping,char *test)
 {
   ret x;
   x=(ret)malloc(sizeof(struct retur));
   x->stopping=stopping;
-  strcpy(x->label,a);
+  strcpy(x->label,test);
   return x;
 }
 
@@ -160,18 +221,25 @@ void input(int n,info head)
   a=getinfo();
   //printf("Enter name:");
   scanf("%s",a->name);
+  
   //printf("Body temperature:");
   scanf("%s",a->body_temperature);
+  
   //printf("Gives birth yes/no:");
   scanf("%s",a->gives_birth);
+  
   //printf("Aquatic_creature yes/no/semi:");
   scanf("%s",a->aquatic_creature);
+  
   //printf("Aerial creature yes/no:");
   scanf("%s",a->aerial_creature);
+  
   //printf("Has legs yes/no:");
   scanf("%s",a->has_legs);
+  
   //printf("hibernates yes/no:");
   scanf("%s",a->hibernates);
+  
   //printf("class label:");
   scanf("%s",a->class_label);
   //printf("id:");
@@ -530,7 +598,5 @@ void main()
  input(n,head);
  //print(head);
  root=tree_growth(head);
- id=find_best_split(head);
- classify(head,id);
  
 }
