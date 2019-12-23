@@ -7,6 +7,7 @@ no
 yes 
 no 
 mammal
+1
 python 
 cold  
 no 
@@ -15,6 +16,7 @@ no
 no 
 yes 
 reptile
+2
 salmon
 cold
 no
@@ -23,6 +25,7 @@ no
 no
 no
 fish
+3
 whale
 warm
 yes
@@ -31,6 +34,7 @@ no
 no
 no
 mammal
+4
 frog 
 cold
 no 
@@ -39,6 +43,7 @@ no
 yes
 yes
 amphibian
+5
 komodo
 cold
 no
@@ -47,6 +52,7 @@ no
 yes
 no
 reptile
+6
 bat
 warm
 yes
@@ -55,6 +61,7 @@ yes
 yes
 yes
 mammal
+7
 pigeon
 warm
 no
@@ -63,6 +70,7 @@ yes
 yes
 no
 bird
+8
 cat
 warm
 yes
@@ -71,6 +79,7 @@ no
 yes
 no
 mammal
+9
 leopard
 cold
 yes
@@ -79,6 +88,7 @@ no
 no
 no 
 fish
+10
 turtle
 cold
 no
@@ -87,6 +97,7 @@ no
 yes
 no
 reptile
+11
 penguin
 warm
 no
@@ -95,6 +106,7 @@ no
 yes
 no 
 bird
+12
 porcupine
 warm
 yes
@@ -103,6 +115,7 @@ no
 yes
 yes
 mammal
+13
 eel
 cold
 no
@@ -111,6 +124,7 @@ no
 no
 no
 fish
+14
 salamander  
 cold
 no
@@ -119,3 +133,4 @@ no
 yes
 yes
 amphibian
+15

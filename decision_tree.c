@@ -22,29 +22,132 @@ struct node
 {
  char test_condition[10];
  char label[10];
+ struct node *lchild;
+ struct node *rchild;
+ int condition_id;
 };
 typedef struct node *node;
+
+struct retur
+{
+  int stopping;
+  char label[10];
+};
+typedef struct retur *ret;
 
 
 char l1[10]="mammal",l2[10]="reptile",l3[10]="fish",l4[10]="amphibian",l5[10]="bird";
 float c[6];//gini index values stored in array
 float c1,c2,c3,c4,c5,c6;
 int mw=0,mc=0,rw=0,rc=0,fw=0,fc=0,aw=0,ac=0,bw=0,bc=0;
+int condition_id_1=1,condition_id_2=2,condition_id_3=3,condition_id_4=4,condition_id_5=5;
+int condition_id_6=6;
+node root;
+char s1[10]="warm";
+char s2[10]="cold";
+char s3[17]="body_temperature";
+char s4[10]="yes";
+char s5[10]="no";
+char s6[11]="gives_birth";
+char s7[16]="aquatic_creature";
+char s8[15]="aerial_creature";
+char s9[10]="has_legs";
+char s10[10]="hibernates";
+ret r;
 
 info getinfo();
+node getnode();
+ret getret(int id,int stopping,char *a);
 void input(int n,info head);
 void print(info head);
-void find_best_split(info head);
+int find_best_split(info head);
 float find_gini_index_binary(char *s1,char *s2,char *s3,info head);
 void check_label_pos(info head,int value);
 float calculate();
 float smallest(float c[6],int n);
+node tree_growth(info head);
+ret stopping condition(head);
+info split_record(int bin,int v,info head);
 
+node tree_growth(info head)
+{
+   int v;
+   ret s;
+   info head_left,head_right;
+   s=stopping condition(head);
+   if(s->stopping==1)//if the stopping condition is met i.e all data points have same label
+   {
+     node leaf;
+     leaf=getnode();
+     leaf->label=s->label//leaf node is created and label is assigned
+     return leaf
+   }
+   else
+   {
+   node rooot;
+   rooot=getnode();
+   v=find_best_split(head);// v is the condition id which is returned by best split function
+   head_left=split_record(1,v,head);//spilt the the records which satisfies the condition
+   head_right=split_record(0,v,head);//spilt the the records which does not satisfy the condition
+   right_child=tree_growth(info head_right);//check foe further growth in child nodes
+   left_child=tree_growth(info head_left);
+   root->rchild=right_child;//assign the child nodes to the root
+   root->lchild=left_child;
+   }
+return rooot;
+}
+
+ret stopping condition(info head)
+{
+ int p;
+ ret r;
+ char test[10];
+ info cur;
+ cur=head->link;
+ strcpy(test,cur->class_label);
+ while(cur!=NULL)
+ {
+   p=strcmp(test,cur->class_label);//to check whether all data points can be grouped under one label
+   if(p!=0)
+   {
+     stopping=0;//this node has to be further splited ,it cannot be terminated
+     r=getret(stopping,test);
+     return r;
+   }
+   cur=cur->link;
+ }
+ 
+ r=getret(stopping,test);//stopping condition is met, leaf node has to be created
+ return r;
+}
+
+info split_record(int bin,int v,info head)
+{
+ info head_new
+ return head_new;
+}
 info getinfo()
 {
   info x;
   x=(info)malloc(sizeof(struct info));
   x->link=NULL;
+  return x;
+}
+
+node getnode()
+{
+  node x;
+  x=(node)malloc(sizeof(struct node));
+  x->link=NULL;
+  return x;
+}
+
+ret getret(int id,int stopping,char *a)
+{
+  ret x;
+  x=(ret)malloc(sizeof(struct retur));
+  x->stopping=stopping;
+  strcpy(x->label,a);
   return x;
 }
 
@@ -71,6 +174,8 @@ void input(int n,info head)
   scanf("%s",a->hibernates);
   //printf("class label:");
   scanf("%s",a->class_label);
+  //printf("id:");
+  scanf("%d",&a->id);
 
   if(head->link==NULL)
   {
@@ -101,61 +206,64 @@ void print(info head)
     cur=cur->link;
   }
 }
-void find_best_split(info head)
+int find_best_split(info head)//finding the best test attribute to spilt based on gini split
 {
   int i=1,k;
   float select;
-  char s1[10]="warm";
-  char s2[10]="cold";
-  char s3[17]="body_temperature";
-  char s4[10]="yes";
-  char s5[10]="no";
-  char s6[11]="gives_birth";
-  char s7[16]="aquatic_creature";
-  char s8[15]="aerial_creature";
-  char s9[10]="has_legs";
-  char s10[10]="hibernates";
-  c[i]=find_gini_index_binary(s1,s2,s3,head);
+
+  c[i]=find_gini_index_binary(s1,s2,s3,head);//gini index for first attribute
   i++;
-  c[i]=find_gini_index_binary(s4,s5,s6,head);
+  c[i]=find_gini_index_binary(s4,s5,s6,head);//gini index for second attribute
   i++;
-  c[i]=find_gini_index_binary(s4,s5,s7,head);
+  c[i]=find_gini_index_binary(s4,s5,s7,head);//gini index for third attribute
   i++;
-  c[i]=find_gini_index_binary(s4,s5,s8,head);
+  c[i]=find_gini_index_binary(s4,s5,s8,head);//gini index for fourth attribute
   i++;
-  c[i]=find_gini_index_binary(s4,s5,s9,head);
+  c[i]=find_gini_index_binary(s4,s5,s9,head);//gini index for fifth attribute
   i++;
-  c[i]=find_gini_index_binary(s4,s5,s10,head);
+  c[i]=find_gini_index_binary(s4,s5,s10,head);//gini index for sixth attribute
   
-  select=smallest(c,i);
+  select=smallest(c,i);//best attribute is the one with least gini index value
   
   for(k=1;k<=i;k++)
   {
     if(select==c[k])
     {
-      if(k==1)
+      if(k==1)//if first attribute has least gini index value 
       {
-         printf("condition is %s\n",s3);
+         printf("condition is %d\n",condition_id_1);
+         return condition_id_1;
+
       }
-      else if(k==2)
+      else if(k==2)//if second attribute has least gini index value
       {
-         printf("condition is %s\n",s6);
+         
+         printf("condition is %d\n",condition_id_2);
+         return condition_id_2;
       }
-      else if(k==3)
+      else if(k==3)//if third attribute has least gini index value
       {
-         printf("condition is %s\n",s7);
+         
+         printf("condition is %d\n",condition_id_3);
+         return condition_id_3;
       }
-      else if(k==4)
+      else if(k==4)//if fourth attribute has least gini index value
       {
-         printf("condition is %s\n",s8);
+         
+         printf("condition is %d\n",condition_id_4);
+         return condition_id_4;
       }
-      else if(k==5)
+      else if(k==5)//if fifth attribute has least gini index value
       {
-         printf("condition is %s\n",s9);
+         
+         printf("condition is %d\n",condition_id_5);
+         return condition_id_5;
       }
-      else if(k==6)
+      else if(k==6)//if sixth attribute has least gini index value
       {
-         printf("condition is %s\n",s10);
+         
+         printf("condition is %d\n",condition_id_6);
+         return condition_id_6;
       }
     }
   }
@@ -416,10 +524,13 @@ void main()
  int n;
  info head;
  head=getinfo();
+ root=getnode();
  //printf("enter the number of data points");
  scanf("%d",&n);
  input(n,head);
  //print(head);
- find_best_split(head);
+ root=tree_growth(head);
+ id=find_best_split(head);
+ classify(head,id);
  
 }
